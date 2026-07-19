@@ -1,109 +1,109 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Modern Bomberman</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap');
-    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
-    html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:#0b0a1f!important;font-family:'Outfit',system-ui,sans-serif;color:#fff;user-select:none;position:fixed;inset:0}
-    body{display:flex;flex-direction:column;align-items:center;padding:env(safe-area-inset-top,8px) 8px env(safe-area-inset-bottom,8px);background:linear-gradient(165deg,#0b0a1f 0%,#14122b 50%,#1a1635 100%)!important}
-    .topbar{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;padding:6px 2px 4px;font-size:.85rem;font-weight:600;flex-shrink:0;z-index:10}
-    .topbar .item{background:rgba(255,255,255,.1);padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:4px}
-    .topbar .hearts{color:#ff6b6b}
-    .power-bar{display:flex;gap:10px;justify-content:center;padding:2px 0 6px;font-size:.8rem;flex-shrink:0}
-    .power-bar span{background:rgba(255,255,255,.1);padding:4px 10px;border-radius:14px}
-    .game-wrapper{width:100%;max-width:480px;flex:1;display:flex;flex-direction:column;align-items:center;min-height:0;position:relative}
-    .canvas-box{position:relative;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 10px 36px rgba(0,0,0,.55);background:#0d0b1e;flex-shrink:1}
-    canvas{display:block;width:100%;height:auto;touch-action:none;background:#0d0b1e}
-    .overlay{position:absolute;inset:0;background:rgba(8,6,22,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30;opacity:0;pointer-events:none;transition:opacity .25s ease;text-align:center;padding:20px}
-    .overlay.show{opacity:1;pointer-events:auto}
-    .overlay h2{font-size:1.8rem;font-weight:800;margin-bottom:8px}
-    .overlay p{opacity:.8;margin-bottom:20px;font-size:.95rem;line-height:1.5}
-    .btn{padding:14px 36px;border:none;border-radius:14px;font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;background:linear-gradient(135deg,#00d2ff,#3a7bd5);color:#fff;box-shadow:0 6px 20px rgba(0,210,255,.35)}
-    .btn:active{transform:scale(.96)}
-    .mobile-controls{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:flex-end;padding:12px 4px 4px;gap:12px;flex-shrink:0;background:transparent}
-    .dpad{display:grid;grid-template-columns:60px 60px 60px;grid-template-rows:60px 60px 60px;gap:4px}
-    .dpad-btn{width:60px;height:60px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center}
-    .dpad-btn:active,.dpad-btn.active{background:rgba(0,210,255,.4);transform:scale(.93)}
-    .dpad-btn.empty{visibility:hidden}
-    .bomb-btn{width:82px;height:82px;border-radius:50%;border:none;background:linear-gradient(145deg,#ff6b6b,#c0392b);color:#fff;font-size:1.8rem;box-shadow:0 6px 22px rgba(255,80,80,.45);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .bomb-btn:active,.bomb-btn.active{transform:scale(.92)}
-    .topbar,.power-bar,.mobile-controls,.game-wrapper{background:transparent!important}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+<title>Modern Bomberman</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:#0b0a1f!important;font-family:'Outfit',system-ui,sans-serif;color:#fff;user-select:none;position:fixed;inset:0}
+body{display:flex;flex-direction:column;align-items:center;padding:env(safe-area-inset-top,8px) 8px env(safe-area-inset-bottom,8px);background:linear-gradient(165deg,#0b0a1f 0%,#14122b 50%,#1a1635 100%)!important}
+.topbar{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;padding:6px 2px 4px;font-size:.85rem;font-weight:600;flex-shrink:0;z-index:10}
+.topbar .item{background:rgba(255,255,255,.1);padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:4px}
+.topbar .hearts{color:#ff6b6b}
+.power-bar{display:flex;gap:10px;justify-content:center;padding:2px 0 6px;font-size:.8rem;flex-shrink:0}
+.power-bar span{background:rgba(255,255,255,.1);padding:4px 10px;border-radius:14px}
+.game-wrapper{width:100%;max-width:480px;flex:1;display:flex;flex-direction:column;align-items:center;min-height:0;position:relative}
+.canvas-box{position:relative;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 10px 36px rgba(0,0,0,.55);background:#0d0b1e;flex-shrink:1}
+canvas{display:block;width:100%;height:auto;touch-action:none;background:#0d0b1e}
+.overlay{position:absolute;inset:0;background:rgba(8,6,22,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30;opacity:0;pointer-events:none;transition:opacity .25s ease;text-align:center;padding:20px}
+.overlay.show{opacity:1;pointer-events:auto}
+.overlay h2{font-size:1.8rem;font-weight:800;margin-bottom:8px}
+.overlay p{opacity:.8;margin-bottom:20px;font-size:.95rem;line-height:1.5}
+.btn{padding:14px 36px;border:none;border-radius:14px;font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;background:linear-gradient(135deg,#00d2ff,#3a7bd5);color:#fff;box-shadow:0 6px 20px rgba(0,210,255,.35)}
+.btn:active{transform:scale(.96)}
+.mobile-controls{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:flex-end;padding:12px 4px 4px;gap:12px;flex-shrink:0;background:transparent}
+.dpad{display:grid;grid-template-columns:60px 60px 60px;grid-template-rows:60px 60px 60px;gap:4px}
+.dpad-btn{width:60px;height:60px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center}
+.dpad-btn:active,.dpad-btn.active{background:rgba(0,210,255,.4);transform:scale(.93)}
+.dpad-btn.empty{visibility:hidden}
+.bomb-btn{width:82px;height:82px;border-radius:50%;border:none;background:linear-gradient(145deg,#ff6b6b,#c0392b);color:#fff;font-size:1.8rem;box-shadow:0 6px 22px rgba(255,80,80,.45);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bomb-btn:active,.bomb-btn.active{transform:scale(.92)}
+.topbar,.power-bar,.mobile-controls,.game-wrapper{background:transparent!important}
+</style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="item">Lv <span id="levelNum">1</span></div>
-    <div class="item hearts">♥ <span id="lives">3</span></div>
-    <div class="item">⭐ <span id="score">0</span></div>
-  </div>
-  <div class="power-bar">
-    <span>💣 <span id="bombCount">1</span></span>
-    <span>🔥 <span id="bombRange">1</span></span>
-    <span>⚡ <span id="speedLvl">1</span></span>
-  </div>
-  <div class="game-wrapper">
-    <div class="canvas-box">
-      <canvas id="game" width="624" height="528"></canvas>
-      <div class="overlay show" id="overlay">
-        <h2 id="ovTitle">Modern Bomberman</h2>
-        <p id="ovMsg">ทำลาย Soft Block + ศัตรู<br>เก็บ Power-up แล้วหาประตูออก</p>
-        <button class="btn" id="startBtn">เริ่มเกม</button>
-      </div>
-    </div>
-    <div class="mobile-controls">
-      <div class="dpad">
-        <div class="dpad-btn empty"></div>
-        <button class="dpad-btn" data-dir="up">▲</button>
-        <div class="dpad-btn empty"></div>
-        <button class="dpad-btn" data-dir="left">◀</button>
-        <div class="dpad-btn empty"></div>
-        <button class="dpad-btn" data-dir="right">▶</button>
-        <div class="dpad-btn empty"></div>
-        <button class="dpad-btn" data-dir="down">▼</button>
-        <div class="dpad-btn empty"></div>
-      </div>
-      <button class="bomb-btn" id="bombBtn">💣</button>
-    </div>
-  </div>
-  <script>
-    const COLS=13,ROWS=11,TILE=48,EMPTY=0,HARD=1,SOFT=2,EXIT=3,BOMB_TIMER=2200,EXPLODE_TIME=380;
-    const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
-    const $=id=>document.getElementById(id);
-    let map=[],player,bombs=[],explosions=[],enemies=[],powerups=[],particles=[];
-    let keys={},moveDir={x:0,y:0},gameState='ready',lastTime=0,animId=null;
-    let level=1,score=0,lives=3,maxBombs=1,bombRange=1,speedMul=1,softLeft=0,enemiesLeft=0,exitOpen=false,invincible=0;
-    const LEVELS=[{soft:.55,enemies:2,name:"เริ่มต้น"},{soft:.62,enemies:3,name:"อันตราย"},{soft:.68,enemies:4,name:"ท้าทาย"},{soft:.72,enemies:5,name:"โหด"},{soft:.75,enemies:6,name:"นรก"}];
-    function createMap(lv){const conf=LEVELS[Math.min(lv-1,LEVELS.length-1)];map=Array.from({length:ROWS},()=>Array(COLS).fill(EMPTY));for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(r===0||r===ROWS-1||c===0||c===COLS-1||(r%2===0&&c%2===0))map[r][c]=HARD;softLeft=0;for(let r=1;r<ROWS-1;r++)for(let c=1;c<COLS-1;c++)if(map[r][c]!==HARD&&!(r<=2&&c<=2)&&Math.random()<conf.soft){map[r][c]=SOFT;softLeft++;}enemies=[];let tries=0;while(enemies.length<conf.enemies&&tries++<100){const r=1+Math.floor(Math.random()*(ROWS-2)),c=1+Math.floor(Math.random()*(COLS-2));if(map[r][c]===EMPTY&&!(r<=3&&c<=3))enemies.push({x:c,y:r,px:c*TILE+TILE/2,py:r*TILE+TILE/2,dir:[[1,0],[-1,0],[0,1],[0,-1]][Math.floor(Math.random()*4)],timer:0,speed:1.05+lv*.09});}enemiesLeft=enemies.length;exitOpen=false;powerups=[];bombs=[];explosions=[];particles=[];}
-    function resetPlayer(){player={x:1,y:1,px:1*TILE+TILE/2,py:1*TILE+TILE/2};invincible=1400;}
-    function tileAt(px,py){const c=Math.floor(px/TILE),r=Math.floor(py/TILE);if(r<0||r>=ROWS||c<0||c>=COLS)return HARD;return map[r][c];}
-    function canWalk(px,py,ignoreBomb=false){const m=12,pts=[[px-m,py-m],[px+m,py-m],[px-m,py+m],[px+m,py+m]];for(const[x,y]of pts){const t=tileAt(x,y);if(t===HARD||t===SOFT)return false;if(!ignoreBomb){const tr=Math.floor(y/TILE),tc=Math.floor(x/TILE);for(const b of bombs){if(b.r===tr&&b.c===tc){if(tr===player.y&&tc===player.x)continue;return false;}}}}return true;}
-    function updatePlayer(dt){if(gameState!=='playing')return;if(invincible>0)invincible-=dt;let dx=moveDir.x,dy=moveDir.y;if(keys['ArrowUp']||keys['w']||keys['W'])dy=-1;if(keys['ArrowDown']||keys['s']||keys['S'])dy=1;if(keys['ArrowLeft']||keys['a']||keys['A'])dx=-1;if(keys['ArrowRight']||keys['d']||keys['D'])dx=1;if(dx&&dy){dx*=.707;dy*=.707}const sp=2.9*speedMul*(dt/16.67),nx=player.px+dx*sp,ny=player.py+dy*sp;if(dx&&canWalk(nx,player.py))player.px=nx;if(dy&&canWalk(player.px,ny))player.py=ny;player.px=Math.max(TILE/2+2,Math.min((COLS-.5)*TILE-2,player.px));player.py=Math.max(TILE/2+2,Math.min((ROWS-.5)*TILE-2,player.py));player.x=Math.floor(player.px/TILE);player.y=Math.floor(player.py/TILE);for(let i=powerups.length-1;i>=0;i--){const p=powerups[i];if(Math.abs(p.px-player.px)<20&&Math.abs(p.py-player.py)<20){applyPower(p.type);powerups.splice(i,1);score+=50;updateUI();}}if(exitOpen&&map[player.y][player.x]===EXIT)nextLevel();}
-    function applyPower(type){if(type==='bomb')maxBombs=Math.min(5,maxBombs+1);if(type==='range')bombRange=Math.min(6,bombRange+1);if(type==='speed')speedMul=Math.min(1.75,speedMul+.18);updateUI();}
-    function placeBomb(){if(gameState!=='playing'||bombs.length>=maxBombs)return;const c=player.x,r=player.y;if(bombs.some(b=>b.c===c&&b.r===r))return;bombs.push({c,r,timer:BOMB_TIMER});}
-    function updateBombs(dt){for(let i=bombs.length-1;i>=0;i--){bombs[i].timer-=dt;if(bombs[i].timer<=0){explode(bombs[i].c,bombs[i].r);bombs.splice(i,1);}}}
-    function explode(c,r){const dirs=[[0,0],[0,-1],[0,1],[-1,0],[1,0]],cells=[];for(const[dc,dr]of dirs){for(let i=0;i<=bombRange;i++){const nc=c+dc*i,nr=r+dr*i;if(nr<0||nr>=ROWS||nc<0||nc>=COLS)break;if(map[nr][nc]===HARD)break;cells.push({c:nc,r:nr});explosions.push({c:nc,r:nr,life:EXPLODE_TIME});for(let k=0;k<4;k++)particles.push({x:nc*TILE+TILE/2,y:nr*TILE+TILE/2,vx:(Math.random()-.5)*4.5,vy:(Math.random()-.5)*4.5,life:260+Math.random()*200,color:`hsl(${20+Math.random()*40},100%,60%)`});if(map[nr][nc]===SOFT){map[nr][nc]=EMPTY;softLeft--;score+=10;if(Math.random()<.34){const types=['bomb','range','speed'];powerups.push({c:nc,r:nr,type:types[Math.floor(Math.random()*3)],px:nc*TILE+TILE/2,py:nr*TILE+TILE/2});}break;}}}for(let i=enemies.length-1;i>=0;i--){const e=enemies[i];if(cells.some(cl=>cl.c===e.x&&cl.r===e.y)){enemies.splice(i,1);enemiesLeft--;score+=100;for(let k=0;k<8;k++)particles.push({x:e.px,y:e.py,vx:(Math.random()-.5)*5.5,vy:(Math.random()-.5)*5.5,life:400,color:'#ff6b6b'});}}if(invincible<=0&&cells.some(cl=>cl.c===player.x&&cl.r===player.y))hurtPlayer();if(softLeft<=0&&enemiesLeft<=0&&!exitOpen){for(let r=ROWS-2;r>=1;r--){for(let c=COLS-2;c>=1;c--)if(map[r][c]===EMPTY){map[r][c]=EXIT;exitOpen=true;break;}if(exitOpen)break;}}updateUI();}
-    function hurtPlayer(){lives--;invincible=1800;updateUI();if(lives<=0){gameState='lose';showOverlay('คุณแพ้!','คะแนน: '+score);}}
-    function updateEnemies(dt){for(const e of enemies){e.timer-=dt;if(e.timer<=0){const dirs=[[1,0],[-1,0],[0,1],[0,-1]];let nd=e.dir;const tx=e.px+nd[0]*TILE*.35,ty=e.py+nd[1]*TILE*.35;if(!canWalk(tx,ty,true)||Math.random()<.1)nd=dirs[Math.floor(Math.random()*4)];e.dir=nd;e.timer=240+Math.random()*380;}const sp=e.speed*(dt/16.67),nx=e.px+e.dir[0]*sp,ny=e.py+e.dir[1]*sp;if(canWalk(nx,e.py,true))e.px=nx;else e.dir[0]*=-1;if(canWalk(e.px,ny,true))e.py=ny;else e.dir[1]*=-1;e.x=Math.floor(e.px/TILE);e.y=Math.floor(e.py/TILE);if(invincible<=0&&Math.abs(e.px-player.px)<22&&Math.abs(e.py-player.py)<22)hurtPlayer();}}
-    function updateExplosions(dt){for(let i=explosions.length-1;i>=0;i--){explosions[i].life-=dt;if(explosions[i].life<=0)explosions.splice(i,1);}}
-    function updateParticles(dt){for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.life-=dt;p.vy+=.08;if(p.life<=0)particles.splice(i,1);}}
-    function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
-    function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const x=c*TILE,y=r*TILE;ctx.fillStyle=(r+c)%2===0?'#15132b':'#12102a';ctx.fillRect(x,y,TILE,TILE);if(map[r][c]===HARD){const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,'#3d3a5c');g.addColorStop(1,'#252340');ctx.fillStyle=g;roundRect(x+3,y+3,TILE-6,TILE-6,9);ctx.fill();ctx.fillStyle='rgba(255,255,255,.06)';roundRect(x+7,y+7,TILE-18,8,3);ctx.fill();}if(map[r][c]===SOFT){const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,'#f4a261');g.addColorStop(1,'#e76f51');ctx.fillStyle=g;roundRect(x+4,y+4,TILE-8,TILE-8,11);ctx.fill();ctx.fillStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.arc(x+TILE/2,y+TILE/2,7,0,Math.PI*2);ctx.fill();}if(map[r][c]===EXIT){ctx.fillStyle='#2ecc71';roundRect(x+8,y+8,TILE-16,TILE-16,8);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 18px Outfit';ctx.textAlign='center';ctx.fillText('🚪',x+TILE/2,y+TILE/2+7);}}for(const p of powerups){const pulse=1+Math.sin(performance.now()/150)*.1;ctx.beginPath();ctx.arc(p.px,p.py,13*pulse,0,Math.PI*2);ctx.fillStyle=p.type==='bomb'?'#ff6b6b':p.type==='range'?'#f1c40f':'#3498db';ctx.fill();ctx.fillStyle='#fff';ctx.font='14px Outfit';ctx.textAlign='center';ctx.fillText(p.type==='bomb'?'💣':p.type==='range'?'🔥':'⚡',p.px,p.py+5);}for(const b of bombs){const x=b.c*TILE+TILE/2,y=b.r*TILE+TILE/2,pulse=1+Math.sin(performance.now()/100)*.1;ctx.beginPath();ctx.arc(x,y,16*pulse,0,Math.PI*2);ctx.fillStyle='rgba(255,70,70,.25)';ctx.fill();ctx.beginPath();ctx.arc(x,y,12*pulse,0,Math.PI*2);const g=ctx.createRadialGradient(x-3,y-3,2,x,y,12);g.addColorStop(0,'#ff6b6b');g.addColorStop(1,'#c0392b');ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='#f1c40f';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(x+7,y-8);ctx.quadraticCurveTo(x+13,y-15,x+9,y-19);ctx.stroke();}for(const ex of explosions){const x=ex.c*TILE+TILE/2,y=ex.r*TILE+TILE/2,a=Math.min(1,ex.life/EXPLODE_TIME),s=16+(1-a)*14;ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fillStyle=`rgba(255,190,40,${a*.85})`;ctx.fill();ctx.beginPath();ctx.arc(x,y,s*.55,0,Math.PI*2);ctx.fillStyle=`rgba(255,80,20,${a})`;ctx.fill();}for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/400);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}for(const e of enemies){ctx.beginPath();ctx.ellipse(e.px,e.py+14,12,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.3)';ctx.fill();const g=ctx.createRadialGradient(e.px-3,e.py-5,2,e.px,e.py,14);g.addColorStop(0,'#ff8a80');g.addColorStop(1,'#c62828');ctx.beginPath();ctx.arc(e.px,e.py,13,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(e.px-4,e.py-2,3,0,Math.PI*2);ctx.arc(e.px+4,e.py-2,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(e.px-3,e.py-2,1.5,0,Math.PI*2);ctx.arc(e.px+5,e.py-2,1.5,0,Math.PI*2);ctx.fill();}if(invincible<=0||Math.floor(invincible/80)%2===0){const px=player.px,py=player.py;ctx.beginPath();ctx.ellipse(px,py+15,13,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.28)';ctx.fill();const g=ctx.createRadialGradient(px-4,py-7,2,px,py,16);g.addColorStop(0,'#7dd3fc');g.addColorStop(1,'#2563eb');ctx.beginPath();ctx.arc(px,py,15,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px-5,py-3,3.3,0,Math.PI*2);ctx.arc(px+5,py-3,3.3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(px-4,py-3,1.7,0,Math.PI*2);ctx.arc(px+6,py-3,1.7,0,Math.PI*2);ctx.fill();}}
-    function updateUI(){$('levelNum').textContent=level;$('lives').textContent=lives;$('score').textContent=score;$('bombCount').textContent=maxBombs;$('bombRange').textContent=bombRange;$('speedLvl').textContent=speedMul.toFixed(1);}
-    function showOverlay(title,msg){$('ovTitle').textContent=title;$('ovMsg').textContent=msg;$('startBtn').textContent=(gameState==='win'||gameState==='lose')?'เล่นอีกครั้ง':'เริ่มเกม';$('overlay').classList.add('show');}
-    function startGame(){level=1;score=0;lives=3;maxBombs=1;bombRange=1;speedMul=1;createMap(level);resetPlayer();gameState='playing';$('overlay').classList.remove('show');updateUI();if(!animId){lastTime=0;animId=requestAnimationFrame(loop);}}
-    function nextLevel(){level++;score+=500;if(level>LEVELS.length){gameState='win';showOverlay('ชนะทั้งหมด!','สุดยอด! คะแนน '+score);return;}createMap(level);resetPlayer();updateUI();showOverlay('ด่าน '+level,LEVELS[level-1].name);setTimeout(()=>{$('overlay').classList.remove('show');gameState='playing';},1300);}
-    function loop(ts){if(!lastTime)lastTime=ts;const dt=Math.min(ts-lastTime,50);lastTime=ts;if(gameState==='playing'){updatePlayer(dt);updateBombs(dt);updateEnemies(dt);updateExplosions(dt);updateParticles(dt);}draw();animId=requestAnimationFrame(loop);}
-    window.addEventListener('keydown',e=>{keys[e.key]=true;if(e.key===' '||e.code==='Space'){e.preventDefault();placeBomb();}});
-    window.addEventListener('keyup',e=>keys[e.key]=false);
-    document.querySelectorAll('.dpad-btn[data-dir]').forEach(btn=>{const dir=btn.dataset.dir;const set=on=>{btn.classList.toggle('active',on);if(dir==='up')moveDir.y=on?-1:0;if(dir==='down')moveDir.y=on?1:0;if(dir==='left')moveDir.x=on?-1:0;if(dir==='right')moveDir.x=on?1:0;};btn.addEventListener('touchstart',e=>{e.preventDefault();set(true);},{passive:false});btn.addEventListener('touchend',e=>{e.preventDefault();set(false);});btn.addEventListener('touchcancel',()=>set(false));btn.addEventListener('mousedown',()=>set(true));btn.addEventListener('mouseup',()=>set(false));btn.addEventListener('mouseleave',()=>set(false));});
-    const bombTrigger=e=>{e.preventDefault();$('bombBtn').classList.add('active');placeBomb();setTimeout(()=>$('bombBtn').classList.remove('active'),140);};
-    $('bombBtn').addEventListener('touchstart',bombTrigger,{passive:false});$('bombBtn').addEventListener('mousedown',bombTrigger);
-    $('startBtn').addEventListener('click',startGame);$('startBtn').addEventListener('touchend',e=>{e.preventDefault();startGame();});
-    document.body.addEventListener('touchmove',e=>{if(e.target.closest('.dpad')||e.target.closest('.bomb-btn')||e.target.tagName==='CANVAS')e.preventDefault();},{passive:false});
-    createMap(1);resetPlayer();updateUI();requestAnimationFrame(loop);
-  </script>
+<div class="topbar">
+<div class="item">Lv <span id="levelNum">1</span></div>
+<div class="item hearts">♥ <span id="lives">3</span></div>
+<div class="item">⭐ <span id="score">0</span></div>
+</div>
+<div class="power-bar">
+<span>💣 <span id="bombCount">1</span></span>
+<span>🔥 <span id="bombRange">1</span></span>
+<span>⚡ <span id="speedLvl">1</span></span>
+</div>
+<div class="game-wrapper">
+<div class="canvas-box">
+<canvas id="game" width="624" height="528"></canvas>
+<div class="overlay show" id="overlay">
+<h2 id="ovTitle">Modern Bomberman</h2>
+<p id="ovMsg">ทำลาย Soft Block + ศัตรู<br>เก็บ Power-up แล้วหาประตูออก</p>
+<button class="btn" id="startBtn">เริ่มเกม</button>
+</div>
+</div>
+<div class="mobile-controls">
+<div class="dpad">
+<div class="dpad-btn empty"></div>
+<button class="dpad-btn" data-dir="up">▲</button>
+<div class="dpad-btn empty"></div>
+<button class="dpad-btn" data-dir="left">◀</button>
+<div class="dpad-btn empty"></div>
+<button class="dpad-btn" data-dir="right">▶</button>
+<div class="dpad-btn empty"></div>
+<button class="dpad-btn" data-dir="down">▼</button>
+<div class="dpad-btn empty"></div>
+</div>
+<button class="bomb-btn" id="bombBtn">💣</button>
+</div>
+</div>
+<script>
+const COLS=13,ROWS=11,TILE=48,EMPTY=0,HARD=1,SOFT=2,EXIT=3,BOMB_TIMER=2200,EXPLODE_TIME=380;
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const $=id=>document.getElementById(id);
+let map=[],player,bombs=[],explosions=[],enemies=[],powerups=[],particles=[];
+let keys={},moveDir={x:0,y:0},gameState='ready',lastTime=0,animId=null;
+let level=1,score=0,lives=3,maxBombs=1,bombRange=1,speedMul=1,softLeft=0,enemiesLeft=0,exitOpen=false,invincible=0;
+const LEVELS=[{soft:.55,enemies:2,name:"เริ่มต้น"},{soft:.62,enemies:3,name:"อันตราย"},{soft:.68,enemies:4,name:"ท้าทาย"},{soft:.72,enemies:5,name:"โหด"},{soft:.75,enemies:6,name:"นรก"}];
+function createMap(lv){const conf=LEVELS[Math.min(lv-1,LEVELS.length-1)];map=Array.from({length:ROWS},()=>Array(COLS).fill(EMPTY));for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(r===0||r===ROWS-1||c===0||c===COLS-1||(r%2===0&&c%2===0))map[r][c]=HARD;softLeft=0;for(let r=1;r<ROWS-1;r++)for(let c=1;c<COLS-1;c++)if(map[r][c]!==HARD&&!(r<=2&&c<=2)&&Math.random()<conf.soft){map[r][c]=SOFT;softLeft++;}enemies=[];let tries=0;while(enemies.length<conf.enemies&&tries++<100){const r=1+Math.floor(Math.random()*(ROWS-2)),c=1+Math.floor(Math.random()*(COLS-2));if(map[r][c]===EMPTY&&!(r<=3&&c<=3))enemies.push({x:c,y:r,px:c*TILE+TILE/2,py:r*TILE+TILE/2,dir:[[1,0],[-1,0],[0,1],[0,-1]][Math.floor(Math.random()*4)],timer:0,speed:1.05+lv*.09});}enemiesLeft=enemies.length;exitOpen=false;powerups=[];bombs=[];explosions=[];particles=[];}
+function resetPlayer(){player={x:1,y:1,px:1*TILE+TILE/2,py:1*TILE+TILE/2};invincible=1400;}
+function tileAt(px,py){const c=Math.floor(px/TILE),r=Math.floor(py/TILE);if(r<0||r>=ROWS||c<0||c>=COLS)return HARD;return map[r][c];}
+function canWalk(px,py,ignoreBomb=false){const m=8;const points=[[px,py],[px-m,py],[px+m,py],[px,py-m],[px,py+m]];for(const[x,y]of points){const t=tileAt(x,y);if(t===HARD||t===SOFT)return false;if(!ignoreBomb){const tr=Math.floor(y/TILE),tc=Math.floor(x/TILE);for(const b of bombs){if(b.r===tr&&b.c===tc){if(tr===player.y&&tc===player.x)continue;return false;}}}}return true;}
+function updatePlayer(dt){if(gameState!=='playing')return;if(invincible>0)invincible-=dt;let dx=moveDir.x,dy=moveDir.y;if(keys['ArrowUp']||keys['w']||keys['W'])dy=-1;if(keys['ArrowDown']||keys['s']||keys['S'])dy=1;if(keys['ArrowLeft']||keys['a']||keys['A'])dx=-1;if(keys['ArrowRight']||keys['d']||keys['D'])dx=1;const sp=3.4*speedMul*(dt/16.67);if(dx||dy){let moved=false;if(dx&&dy){const nx=player.px+dx*sp*.707,ny=player.py+dy*sp*.707;if(canWalk(nx,ny)){player.px=nx;player.py=ny;moved=true;}}if(!moved){if(dx){const nx=player.px+dx*sp;if(canWalk(nx,player.py)){player.px=nx;moved=true;}}if(dy){const ny=player.py+dy*sp;if(canWalk(player.px,ny)){player.py=ny;moved=true;}}}}player.px=Math.max(TILE/2+4,Math.min((COLS-.5)*TILE-4,player.px));player.py=Math.max(TILE/2+4,Math.min((ROWS-.5)*TILE-4,player.py));player.x=Math.floor(player.px/TILE);player.y=Math.floor(player.py/TILE);for(let i=powerups.length-1;i>=0;i--){const p=powerups[i];if(Math.abs(p.px-player.px)<22&&Math.abs(p.py-player.py)<22){applyPower(p.type);powerups.splice(i,1);score+=50;updateUI();}}if(exitOpen&&map[player.y][player.x]===EXIT)nextLevel();}
+function applyPower(type){if(type==='bomb')maxBombs=Math.min(5,maxBombs+1);if(type==='range')bombRange=Math.min(6,bombRange+1);if(type==='speed')speedMul=Math.min(1.75,speedMul+.18);updateUI();}
+function placeBomb(){if(gameState!=='playing'||bombs.length>=maxBombs)return;const c=player.x,r=player.y;if(bombs.some(b=>b.c===c&&b.r===r))return;bombs.push({c,r,timer:BOMB_TIMER});}
+function updateBombs(dt){for(let i=bombs.length-1;i>=0;i--){bombs[i].timer-=dt;if(bombs[i].timer<=0){explode(bombs[i].c,bombs[i].r);bombs.splice(i,1);}}}
+function explode(c,r){const dirs=[[0,0],[0,-1],[0,1],[-1,0],[1,0]],cells=[];for(const[dc,dr]of dirs){for(let i=0;i<=bombRange;i++){const nc=c+dc*i,nr=r+dr*i;if(nr<0||nr>=ROWS||nc<0||nc>=COLS)break;if(map[nr][nc]===HARD)break;cells.push({c:nc,r:nr});explosions.push({c:nc,r:nr,life:EXPLODE_TIME});for(let k=0;k<4;k++)particles.push({x:nc*TILE+TILE/2,y:nr*TILE+TILE/2,vx:(Math.random()-.5)*4.5,vy:(Math.random()-.5)*4.5,life:260+Math.random()*200,color:`hsl(${20+Math.random()*40},100%,60%)`});if(map[nr][nc]===SOFT){map[nr][nc]=EMPTY;softLeft--;score+=10;if(Math.random()<.34){const types=['bomb','range','speed'];powerups.push({c:nc,r:nr,type:types[Math.floor(Math.random()*3)],px:nc*TILE+TILE/2,py:nr*TILE+TILE/2});}break;}}}for(let i=enemies.length-1;i>=0;i--){const e=enemies[i];if(cells.some(cl=>cl.c===e.x&&cl.r===e.y)){enemies.splice(i,1);enemiesLeft--;score+=100;for(let k=0;k<8;k++)particles.push({x:e.px,y:e.py,vx:(Math.random()-.5)*5.5,vy:(Math.random()-.5)*5.5,life:400,color:'#ff6b6b'});}}if(invincible<=0&&cells.some(cl=>cl.c===player.x&&cl.r===player.y))hurtPlayer();if(softLeft<=0&&enemiesLeft<=0&&!exitOpen){for(let r=ROWS-2;r>=1;r--){for(let c=COLS-2;c>=1;c--)if(map[r][c]===EMPTY){map[r][c]=EXIT;exitOpen=true;break;}if(exitOpen)break;}}updateUI();}
+function hurtPlayer(){lives--;invincible=1800;updateUI();if(lives<=0){gameState='lose';showOverlay('คุณแพ้!','คะแนน: '+score);}}
+function updateEnemies(dt){for(const e of enemies){e.timer-=dt;if(e.timer<=0){const dirs=[[1,0],[-1,0],[0,1],[0,-1]];let nd=e.dir;const tx=e.px+nd[0]*TILE*.35,ty=e.py+nd[1]*TILE*.35;if(!canWalk(tx,ty,true)||Math.random()<.1)nd=dirs[Math.floor(Math.random()*4)];e.dir=nd;e.timer=240+Math.random()*380;}const sp=e.speed*(dt/16.67),nx=e.px+e.dir[0]*sp,ny=e.py+e.dir[1]*sp;if(canWalk(nx,e.py,true))e.px=nx;else e.dir[0]*=-1;if(canWalk(e.px,ny,true))e.py=ny;else e.dir[1]*=-1;e.x=Math.floor(e.px/TILE);e.y=Math.floor(e.py/TILE);if(invincible<=0&&Math.abs(e.px-player.px)<22&&Math.abs(e.py-player.py)<22)hurtPlayer();}}
+function updateExplosions(dt){for(let i=explosions.length-1;i>=0;i--){explosions[i].life-=dt;if(explosions[i].life<=0)explosions.splice(i,1);}}
+function updateParticles(dt){for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.life-=dt;p.vy+=.08;if(p.life<=0)particles.splice(i,1);}}
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const x=c*TILE,y=r*TILE;ctx.fillStyle=(r+c)%2===0?'#15132b':'#12102a';ctx.fillRect(x,y,TILE,TILE);if(map[r][c]===HARD){const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,'#3d3a5c');g.addColorStop(1,'#252340');ctx.fillStyle=g;roundRect(x+3,y+3,TILE-6,TILE-6,9);ctx.fill();ctx.fillStyle='rgba(255,255,255,.06)';roundRect(x+7,y+7,TILE-18,8,3);ctx.fill();}if(map[r][c]===SOFT){const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,'#f4a261');g.addColorStop(1,'#e76f51');ctx.fillStyle=g;roundRect(x+4,y+4,TILE-8,TILE-8,11);ctx.fill();ctx.fillStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.arc(x+TILE/2,y+TILE/2,7,0,Math.PI*2);ctx.fill();}if(map[r][c]===EXIT){ctx.fillStyle='#2ecc71';roundRect(x+8,y+8,TILE-16,TILE-16,8);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 18px Outfit';ctx.textAlign='center';ctx.fillText('🚪',x+TILE/2,y+TILE/2+7);}}for(const p of powerups){const pulse=1+Math.sin(performance.now()/150)*.1;ctx.beginPath();ctx.arc(p.px,p.py,13*pulse,0,Math.PI*2);ctx.fillStyle=p.type==='bomb'?'#ff6b6b':p.type==='range'?'#f1c40f':'#3498db';ctx.fill();ctx.fillStyle='#fff';ctx.font='14px Outfit';ctx.textAlign='center';ctx.fillText(p.type==='bomb'?'💣':p.type==='range'?'🔥':'⚡',p.px,p.py+5);}for(const b of bombs){const x=b.c*TILE+TILE/2,y=b.r*TILE+TILE/2,pulse=1+Math.sin(performance.now()/100)*.1;ctx.beginPath();ctx.arc(x,y,16*pulse,0,Math.PI*2);ctx.fillStyle='rgba(255,70,70,.25)';ctx.fill();ctx.beginPath();ctx.arc(x,y,12*pulse,0,Math.PI*2);const g=ctx.createRadialGradient(x-3,y-3,2,x,y,12);g.addColorStop(0,'#ff6b6b');g.addColorStop(1,'#c0392b');ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='#f1c40f';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(x+7,y-8);ctx.quadraticCurveTo(x+13,y-15,x+9,y-19);ctx.stroke();}for(const ex of explosions){const x=ex.c*TILE+TILE/2,y=ex.r*TILE+TILE/2,a=Math.min(1,ex.life/EXPLODE_TIME),s=16+(1-a)*14;ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fillStyle=`rgba(255,190,40,${a*.85})`;ctx.fill();ctx.beginPath();ctx.arc(x,y,s*.55,0,Math.PI*2);ctx.fillStyle=`rgba(255,80,20,${a})`;ctx.fill();}for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/400);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}for(const e of enemies){ctx.beginPath();ctx.ellipse(e.px,e.py+14,12,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.3)';ctx.fill();const g=ctx.createRadialGradient(e.px-3,e.py-5,2,e.px,e.py,14);g.addColorStop(0,'#ff8a80');g.addColorStop(1,'#c62828');ctx.beginPath();ctx.arc(e.px,e.py,13,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(e.px-4,e.py-2,3,0,Math.PI*2);ctx.arc(e.px+4,e.py-2,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(e.px-3,e.py-2,1.5,0,Math.PI*2);ctx.arc(e.px+5,e.py-2,1.5,0,Math.PI*2);ctx.fill();}if(invincible<=0||Math.floor(invincible/80)%2===0){const px=player.px,py=player.py;ctx.beginPath();ctx.ellipse(px,py+15,13,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.28)';ctx.fill();const g=ctx.createRadialGradient(px-4,py-7,2,px,py,16);g.addColorStop(0,'#7dd3fc');g.addColorStop(1,'#2563eb');ctx.beginPath();ctx.arc(px,py,15,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px-5,py-3,3.3,0,Math.PI*2);ctx.arc(px+5,py-3,3.3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(px-4,py-3,1.7,0,Math.PI*2);ctx.arc(px+6,py-3,1.7,0,Math.PI*2);ctx.fill();}}
+function updateUI(){$('levelNum').textContent=level;$('lives').textContent=lives;$('score').textContent=score;$('bombCount').textContent=maxBombs;$('bombRange').textContent=bombRange;$('speedLvl').textContent=speedMul.toFixed(1);}
+function showOverlay(title,msg){$('ovTitle').textContent=title;$('ovMsg').textContent=msg;$('startBtn').textContent=(gameState==='win'||gameState==='lose')?'เล่นอีกครั้ง':'เริ่มเกม';$('overlay').classList.add('show');}
+function startGame(){level=1;score=0;lives=3;maxBombs=1;bombRange=1;speedMul=1;createMap(level);resetPlayer();gameState='playing';$('overlay').classList.remove('show');updateUI();if(!animId){lastTime=0;animId=requestAnimationFrame(loop);}}
+function nextLevel(){level++;score+=500;if(level>LEVELS.length){gameState='win';showOverlay('ชนะทั้งหมด!','สุดยอด! คะแนน '+score);return;}createMap(level);resetPlayer();updateUI();showOverlay('ด่าน '+level,LEVELS[level-1].name);setTimeout(()=>{$('overlay').classList.remove('show');gameState='playing';},1300);}
+function loop(ts){if(!lastTime)lastTime=ts;const dt=Math.min(ts-lastTime,50);lastTime=ts;if(gameState==='playing'){updatePlayer(dt);updateBombs(dt);updateEnemies(dt);updateExplosions(dt);updateParticles(dt);}draw();animId=requestAnimationFrame(loop);}
+window.addEventListener('keydown',e=>{keys[e.key]=true;if(e.key===' '||e.code==='Space'){e.preventDefault();placeBomb();}});
+window.addEventListener('keyup',e=>keys[e.key]=false);
+document.querySelectorAll('.dpad-btn[data-dir]').forEach(btn=>{const dir=btn.dataset.dir;const set=on=>{btn.classList.toggle('active',on);if(dir==='up')moveDir.y=on?-1:0;if(dir==='down')moveDir.y=on?1:0;if(dir==='left')moveDir.x=on?-1:0;if(dir==='right')moveDir.x=on?1:0;};btn.addEventListener('touchstart',e=>{e.preventDefault();set(true);},{passive:false});btn.addEventListener('touchend',e=>{e.preventDefault();set(false);});btn.addEventListener('touchcancel',()=>set(false));btn.addEventListener('mousedown',()=>set(true));btn.addEventListener('mouseup',()=>set(false));btn.addEventListener('mouseleave',()=>set(false));});
+const bombTrigger=e=>{e.preventDefault();$('bombBtn').classList.add('active');placeBomb();setTimeout(()=>$('bombBtn').classList.remove('active'),140);};
+$('bombBtn').addEventListener('touchstart',bombTrigger,{passive:false});$('bombBtn').addEventListener('mousedown',bombTrigger);
+$('startBtn').addEventListener('click',startGame);$('startBtn').addEventListener('touchend',e=>{e.preventDefault();startGame();});
+document.body.addEventListener('touchmove',e=>{if(e.target.closest('.dpad')||e.target.closest('.bomb-btn')||e.target.tagName==='CANVAS')e.preventDefault();},{passive:false});
+createMap(1);resetPlayer();updateUI();requestAnimationFrame(loop);
+</script>
 </body>
 </html>
