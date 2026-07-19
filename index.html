@@ -23,11 +23,12 @@ canvas{display:block;width:100%;height:auto;background:#0d0b1e}
 .overlay p{opacity:.8;margin-bottom:18px;font-size:.92rem;line-height:1.45}
 .btn{padding:13px 32px;border:none;border-radius:14px;font-family:inherit;font-weight:700;font-size:1rem;background:linear-gradient(135deg,#00d2ff,#3a7bd5);color:#fff;box-shadow:0 5px 18px rgba(0,210,255,.35)}
 .btn:active{transform:scale(.96)}
-.controls{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;padding:10px 6px 4px;flex-shrink:0}
-.joy-zone{width:130px;height:130px;position:relative;flex-shrink:0}
-.joy-base{width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);position:relative}
-.joy-stick{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#00d2ff,#3a7bd5);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 4px 14px rgba(0,210,255,.4);pointer-events:none}
-.bomb-btn{width:78px;height:78px;border-radius:50%;border:none;background:linear-gradient(145deg,#ff6b6b,#c0392b);color:#fff;font-size:1.7rem;box-shadow:0 5px 18px rgba(255,80,80,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.controls{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 4px 4px;gap:12px;flex-shrink:0}
+.dpad{display:grid;grid-template-columns:62px 62px 62px;grid-template-rows:62px 62px 62px;gap:4px}
+.dpad-btn{width:62px;height:62px;border-radius:16px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.13);color:#fff;font-size:1.45rem;display:flex;align-items:center;justify-content:center}
+.dpad-btn:active,.dpad-btn.active{background:rgba(0,210,255,.45);transform:scale(.93)}
+.dpad-btn.empty{visibility:hidden}
+.bomb-btn{width:80px;height:80px;border-radius:50%;border:none;background:linear-gradient(145deg,#ff6b6b,#c0392b);color:#fff;font-size:1.75rem;box-shadow:0 5px 18px rgba(255,80,80,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .bomb-btn:active,.bomb-btn.active{transform:scale(.92)}
 </style>
 </head>
@@ -52,10 +53,16 @@ canvas{display:block;width:100%;height:auto;background:#0d0b1e}
     </div>
   </div>
   <div class="controls">
-    <div class="joy-zone" id="joyZone">
-      <div class="joy-base" id="joyBase">
-        <div class="joy-stick" id="joyStick"></div>
-      </div>
+    <div class="dpad">
+      <div class="dpad-btn empty"></div>
+      <button class="dpad-btn" data-dir="up">▲</button>
+      <div class="dpad-btn empty"></div>
+      <button class="dpad-btn" data-dir="left">◀</button>
+      <div class="dpad-btn empty"></div>
+      <button class="dpad-btn" data-dir="right">▶</button>
+      <div class="dpad-btn empty"></div>
+      <button class="dpad-btn" data-dir="down">▼</button>
+      <div class="dpad-btn empty"></div>
     </div>
     <button class="bomb-btn" id="bombBtn">💣</button>
   </div>
@@ -88,18 +95,12 @@ function showOverlay(title,msg){$('ovTitle').textContent=title;$('ovMsg').textCo
 function startGame(){level=1;score=0;lives=3;maxBombs=1;bombRange=1;speedMul=1;createMap(level);resetPlayer();gameState='playing';$('overlay').classList.remove('show');updateUI();if(!animId){lastTime=0;animId=requestAnimationFrame(loop);}}
 function nextLevel(){level++;score+=500;if(level>LEVELS.length){gameState='win';showOverlay('ชนะทั้งหมด!','สุดยอด! คะแนน '+score);return;}createMap(level);resetPlayer();updateUI();showOverlay('ด่าน '+level,LEVELS[level-1].name);setTimeout(()=>{$('overlay').classList.remove('show');gameState='playing';},1300);}
 function loop(ts){if(!lastTime)lastTime=ts;const dt=Math.min(ts-lastTime,50);lastTime=ts;if(gameState==='playing'){updatePlayer(dt);updateBombs(dt);updateEnemies(dt);updateExplosions(dt);updateParticles(dt);}draw();animId=requestAnimationFrame(loop);}
-const joyZone=$('joyZone'),joyStick=$('joyStick'),joyBase=$('joyBase');
-const maxDist=42;let joyActive=false,joyId=null;
-function joyStart(e){e.preventDefault();const t=e.changedTouches?e.changedTouches[0]:e;joyActive=true;joyId=t.identifier!==undefined?t.identifier:null;joyMove(e);}
-function joyMove(e){if(!joyActive)return;e.preventDefault();let t=null;if(e.changedTouches){for(const touch of e.changedTouches){if(touch.identifier===joyId){t=touch;break;}}if(!t)return;}else t=e;const rect=joyBase.getBoundingClientRect();const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;let dx=t.clientX-cx,dy=t.clientY-cy;const dist=Math.sqrt(dx*dx+dy*dy);if(dist>maxDist){dx=dx/dist*maxDist;dy=dy/dist*maxDist;}joyStick.style.transform=`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;const len=Math.sqrt(dx*dx+dy*dy);if(len>5){moveDir.x=dx/maxDist;moveDir.y=dy/maxDist;}else{moveDir.x=0;moveDir.y=0;}}
-function joyEnd(e){if(!joyActive)return;if(e.changedTouches){let found=false;for(const touch of e.changedTouches){if(touch.identifier===joyId){found=true;break;}}if(!found)return;}joyActive=false;joyId=null;joyStick.style.transform='translate(-50%,-50%)';moveDir.x=0;moveDir.y=0;}
-joyZone.addEventListener('touchstart',joyStart,{passive:false});joyZone.addEventListener('touchmove',joyMove,{passive:false});joyZone.addEventListener('touchend',joyEnd);joyZone.addEventListener('touchcancel',joyEnd);
-joyZone.addEventListener('mousedown',joyStart);window.addEventListener('mousemove',e=>{if(joyActive)joyMove(e);});window.addEventListener('mouseup',joyEnd);
+document.querySelectorAll('.dpad-btn[data-dir]').forEach(btn=>{const dir=btn.dataset.dir;const set=on=>{btn.classList.toggle('active',on);if(dir==='up')moveDir.y=on?-1:0;if(dir==='down')moveDir.y=on?1:0;if(dir==='left')moveDir.x=on?-1:0;if(dir==='right')moveDir.x=on?1:0;};btn.addEventListener('touchstart',e=>{e.preventDefault();set(true);},{passive:false});btn.addEventListener('touchend',e=>{e.preventDefault();set(false);});btn.addEventListener('touchcancel',()=>set(false));btn.addEventListener('mousedown',()=>set(true));btn.addEventListener('mouseup',()=>set(false));btn.addEventListener('mouseleave',()=>set(false));});
 const bombTrigger=e=>{e.preventDefault();$('bombBtn').classList.add('active');placeBomb();setTimeout(()=>$('bombBtn').classList.remove('active'),140);};
 $('bombBtn').addEventListener('touchstart',bombTrigger,{passive:false});$('bombBtn').addEventListener('mousedown',bombTrigger);
 window.addEventListener('keydown',e=>{keys[e.key]=true;if(e.key===' '||e.code==='Space'){e.preventDefault();placeBomb();}});window.addEventListener('keyup',e=>keys[e.key]=false);
 $('startBtn').addEventListener('click',startGame);$('startBtn').addEventListener('touchend',e=>{e.preventDefault();startGame();});
-document.body.addEventListener('touchmove',e=>{if(e.target.closest('.joy-zone')||e.target.closest('.bomb-btn')||e.target.tagName==='CANVAS')e.preventDefault();},{passive:false});
+document.body.addEventListener('touchmove',e=>{if(e.target.closest('.dpad')||e.target.closest('.bomb-btn')||e.target.tagName==='CANVAS')e.preventDefault();},{passive:false});
 createMap(1);resetPlayer();updateUI();requestAnimationFrame(loop);
 </script>
 </body>
