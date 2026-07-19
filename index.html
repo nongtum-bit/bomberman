@@ -5,250 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Modern Bomberman</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: none;
-    }
-
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      position: fixed;
-      width: 100%;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      background: linear-gradient(160deg, #0f0c29 0%, #1a1a2e 40%, #16213e 100%);
-      font-family: 'Outfit', system-ui, sans-serif;
-      color: #fff;
-      user-select: none;
-      padding: env(safe-area-inset-top) 8px env(safe-area-inset-bottom);
-    }
-
-    .header {
-      text-align: center;
-      padding: 10px 0 6px;
-      flex-shrink: 0;
-    }
-
-    .header h1 {
-      font-size: clamp(1.3rem, 5vw, 1.7rem);
-      font-weight: 700;
-      background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .header p {
-      font-size: 0.8rem;
-      opacity: 0.65;
-      margin-top: 2px;
-    }
-
-    .game-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 0;
-    }
-
-    .canvas-box {
-      position: relative;
-      width: 100%;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-      background: #0f0c29;
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-      touch-action: none;
-    }
-
-    .status {
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(6px);
-      padding: 4px 14px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      z-index: 5;
-      white-space: nowrap;
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 8, 30, 0.88);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .overlay.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .overlay h2 {
-      font-size: 1.8rem;
-      margin-bottom: 6px;
-    }
-
-    .overlay p {
-      opacity: 0.75;
-      margin-bottom: 18px;
-      font-size: 0.95rem;
-    }
-
-    .btn {
-      padding: 12px 28px;
-      border: none;
-      border-radius: 12px;
-      font-family: inherit;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .btn:active {
-      transform: scale(0.96);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-      color: white;
-      box-shadow: 0 4px 18px rgba(0, 210, 255, 0.35);
-    }
-
-    .mobile-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      width: 100%;
-      max-width: 480px;
-      padding: 12px 8px 8px;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .dpad {
-      display: grid;
-      grid-template-columns: 56px 56px 56px;
-      grid-template-rows: 56px 56px 56px;
-      gap: 4px;
-    }
-
-    .dpad-btn {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      border: none;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .dpad-btn:active, .dpad-btn.active {
-      background: rgba(0, 210, 255, 0.35);
-      transform: scale(0.94);
-    }
-
-    .dpad-btn.empty {
-      visibility: hidden;
-    }
-
-    .bomb-btn {
-      width: 76px;
-      height: 76px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(145deg, #ff6b6b, #c0392b);
-      color: white;
-      font-size: 1.6rem;
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(255, 80, 80, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .bomb-btn:active, .bomb-btn.active {
-      transform: scale(0.92);
-      box-shadow: 0 3px 12px rgba(255, 80, 80, 0.5);
-    }
-
-    .desktop-hint {
-      font-size: 0.78rem;
-      opacity: 0.55;
-      text-align: center;
-      padding: 4px 0 8px;
-    }
-
-    @media (min-width: 600px) {
-      .mobile-controls {
-        display: none;
-      }
-    }
-
-    @media (max-width: 599px) {
-      .desktop-hint {
-        display: none;
-      }
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
+    html,body{height:100%;overflow:hidden;position:fixed;width:100%}
+    body{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:linear-gradient(165deg,#0b0a1f 0%,#14122b 45%,#1a1635 100%);font-family:'Outfit',system-ui,sans-serif;color:#fff;user-select:none;padding:env(safe-area-inset-top) 6px env(safe-area-inset-bottom)}
+    .topbar{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;padding:8px 4px 6px;font-size:.82rem;font-weight:600;flex-shrink:0}
+    .topbar .item{background:rgba(255,255,255,.08);padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:5px}
+    .topbar .hearts{color:#ff6b6b}
+    .game-wrapper{width:100%;max-width:480px;flex:1;display:flex;flex-direction:column;align-items:center;min-height:0}
+    .canvas-box{position:relative;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5);background:#0d0b1e}
+    canvas{display:block;width:100%;height:auto;touch-action:none}
+    .overlay{position:absolute;inset:0;background:rgba(8,6,22,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30;opacity:0;pointer-events:none;transition:opacity .28s ease;text-align:center;padding:20px}
+    .overlay.show{opacity:1;pointer-events:auto}
+    .overlay h2{font-size:1.9rem;font-weight:800;margin-bottom:6px}
+    .overlay p{opacity:.78;margin-bottom:18px;font-size:.95rem;line-height:1.45}
+    .btn{padding:13px 32px;border:none;border-radius:14px;font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;transition:transform .15s,box-shadow .15s}
+    .btn:active{transform:scale(.96)}
+    .btn-primary{background:linear-gradient(135deg,#00d2ff,#3a7bd5);color:#fff;box-shadow:0 6px 22px rgba(0,210,255,.35)}
+    .mobile-controls{display:flex;justify-content:space-between;align-items:flex-end;width:100%;max-width:480px;padding:10px 4px 6px;gap:10px;flex-shrink:0}
+    .dpad{display:grid;grid-template-columns:58px 58px 58px;grid-template-rows:58px 58px 58px;gap:3px}
+    .dpad-btn{width:58px;height:58px;border-radius:16px;border:none;background:rgba(255,255,255,.09);color:#fff;font-size:1.35rem;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1)}
+    .dpad-btn:active,.dpad-btn.active{background:rgba(0,210,255,.32);transform:scale(.93)}
+    .dpad-btn.empty{visibility:hidden}
+    .bomb-btn{width:78px;height:78px;border-radius:50%;border:none;background:linear-gradient(145deg,#ff6b6b,#c0392b);color:#fff;font-size:1.7rem;box-shadow:0 6px 20px rgba(255,80,80,.4);display:flex;align-items:center;justify-content:center}
+    .bomb-btn:active,.bomb-btn.active{transform:scale(.91)}
+    .power-bar{display:flex;gap:8px;justify-content:center;padding:4px 0 2px;font-size:.75rem;opacity:.85}
+    .power-bar span{background:rgba(255,255,255,.08);padding:3px 9px;border-radius:12px}
+    @media(min-width:600px){.mobile-controls{display:none}}
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Modern Bomberman</h1>
-    <p>Single Player · Mobile Friendly</p>
+  <div class="topbar">
+    <div class="item">Lv <span id="levelNum">1</span></div>
+    <div class="item hearts">♥ <span id="lives">3</span></div>
+    <div class="item">⭐ <span id="score">0</span></div>
   </div>
-
+  <div class="power-bar">
+    <span>💣 <span id="bombCount">1</span></span>
+    <span>🔥 <span id="bombRange">1</span></span>
+    <span>⚡ <span id="speedLvl">1</span></span>
+  </div>
   <div class="game-wrapper">
     <div class="canvas-box">
-      <div class="status" id="status">Soft blocks: 0</div>
       <canvas id="game" width="624" height="528"></canvas>
-
       <div class="overlay show" id="overlay">
-        <h2 id="overlayTitle">Modern Bomberman</h2>
-        <p id="overlayMsg">ทำลาย Soft Block สีส้มให้หมด</p>
+        <h2 id="ovTitle">Modern Bomberman</h2>
+        <p id="ovMsg">ทำลาย Soft Block + ศัตรู<br>เก็บ Power-up แล้วหาประตูออก</p>
         <button class="btn btn-primary" id="startBtn">เริ่มเกม</button>
       </div>
     </div>
-
     <div class="mobile-controls">
       <div class="dpad">
         <div class="dpad-btn empty"></div>
@@ -261,367 +66,46 @@
         <button class="dpad-btn" data-dir="down">▼</button>
         <div class="dpad-btn empty"></div>
       </div>
-
       <button class="bomb-btn" id="bombBtn">💣</button>
     </div>
   </div>
-
-  <div class="desktop-hint">
-    Desktop: WASD / ลูกศร เดิน · Spacebar วางระเบิด
-  </div>
-
   <script>
-    const COLS = 13;
-    const ROWS = 11;
-    const TILE = 48;
-    const BOMB_TIMER = 2400;
-    const EXPLODE_DURATION = 420;
-    const PLAYER_SPEED = 3.4;
-
-    const EMPTY = 0;
-    const HARD = 1;
-    const SOFT = 2;
-
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-    const statusEl = document.getElementById('status');
-    const overlay = document.getElementById('overlay');
-    const overlayTitle = document.getElementById('overlayTitle');
-    const overlayMsg = document.getElementById('overlayMsg');
-    const startBtn = document.getElementById('startBtn');
-    const bombBtn = document.getElementById('bombBtn');
-
-    let map = [];
-    let player = { x: 1, y: 1, px: 0, py: 0 };
-    let bombs = [];
-    let explosions = [];
-    let keys = {};
-    let softCount = 0;
-    let gameState = 'ready';
-    let lastTime = 0;
-    let animId = null;
-    let moveDir = { x: 0, y: 0 };
-
-    function createMap() {
-      map = Array.from({ length: ROWS }, () => Array(COLS).fill(EMPTY));
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          if (r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1) {
-            map[r][c] = HARD;
-          } else if (r % 2 === 0 && c % 2 === 0) {
-            map[r][c] = HARD;
-          }
-        }
-      }
-      softCount = 0;
-      for (let r = 1; r < ROWS - 1; r++) {
-        for (let c = 1; c < COLS - 1; c++) {
-          if (map[r][c] !== HARD) {
-            if (r <= 2 && c <= 2) continue;
-            if (Math.random() < 0.70) {
-              map[r][c] = SOFT;
-              softCount++;
-            }
-          }
-        }
-      }
-    }
-
-    function resetPlayer() {
-      player.x = 1;
-      player.y = 1;
-      player.px = 1 * TILE + TILE / 2;
-      player.py = 1 * TILE + TILE / 2;
-    }
-
-    function canMoveTo(px, py) {
-      const margin = 13;
-      const points = [
-        [px - margin, py - margin],
-        [px + margin, py - margin],
-        [px - margin, py + margin],
-        [px + margin, py + margin]
-      ];
-      for (const [x, y] of points) {
-        const c = Math.floor(x / TILE);
-        const r = Math.floor(y / TILE);
-        if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return false;
-        if (map[r][c] === HARD || map[r][c] === SOFT) return false;
-        for (const b of bombs) {
-          if (b.r === r && b.c === c) return false;
-        }
-      }
-      return true;
-    }
-
-    function updatePlayer(dt) {
-      if (gameState !== 'playing') return;
-      let dx = moveDir.x;
-      let dy = moveDir.y;
-      if (keys['ArrowUp'] || keys['w'] || keys['W']) dy = -1;
-      if (keys['ArrowDown'] || keys['s'] || keys['S']) dy = 1;
-      if (keys['ArrowLeft'] || keys['a'] || keys['A']) dx = -1;
-      if (keys['ArrowRight'] || keys['d'] || keys['D']) dx = 1;
-      if (dx !== 0 && dy !== 0) { dx *= 0.707; dy *= 0.707; }
-      const speed = PLAYER_SPEED * (dt / 16.67);
-      const nextX = player.px + dx * speed;
-      const nextY = player.py + dy * speed;
-      if (dx !== 0 && canMoveTo(nextX, player.py)) player.px = nextX;
-      if (dy !== 0 && canMoveTo(player.px, nextY)) player.py = nextY;
-      player.px = Math.max(TILE / 2 + 2, Math.min((COLS - 0.5) * TILE - 2, player.px));
-      player.py = Math.max(TILE / 2 + 2, Math.min((ROWS - 0.5) * TILE - 2, player.py));
-      player.x = Math.floor(player.px / TILE);
-      player.y = Math.floor(player.py / TILE);
-    }
-
-    function placeBomb() {
-      if (gameState !== 'playing') return;
-      const c = player.x;
-      const r = player.y;
-      if (bombs.some(b => b.c === c && b.r === r)) return;
-      bombs.push({ c, r, timer: BOMB_TIMER });
-    }
-
-    function updateBombs(dt) {
-      for (let i = bombs.length - 1; i >= 0; i--) {
-        bombs[i].timer -= dt;
-        if (bombs[i].timer <= 0) {
-          explode(bombs[i].c, bombs[i].r);
-          bombs.splice(i, 1);
-        }
-      }
-    }
-
-    function explode(c, r) {
-      const dirs = [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0]];
-      const range = 2;
-      for (const [dc, dr] of dirs) {
-        for (let i = 0; i <= range; i++) {
-          const nc = c + dc * i;
-          const nr = r + dr * i;
-          if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) break;
-          if (map[nr][nc] === HARD) break;
-          explosions.push({ c: nc, r: nr, life: EXPLODE_DURATION });
-          if (map[nr][nc] === SOFT) {
-            map[nr][nc] = EMPTY;
-            softCount--;
-            break;
-          }
-        }
-      }
-      for (const ex of explosions) {
-        if (ex.c === player.x && ex.r === player.y) {
-          gameState = 'lose';
-          showOverlay('คุณแพ้!', 'โดนระเบิด ลองใหม่นะ');
-          return;
-        }
-      }
-      if (softCount <= 0) {
-        gameState = 'win';
-        showOverlay('คุณชนะ!', 'ทำลาย Soft Block หมดแล้ว!');
-      }
-    }
-
-    function updateExplosions(dt) {
-      for (let i = explosions.length - 1; i >= 0; i--) {
-        explosions[i].life -= dt;
-        if (explosions[i].life <= 0) explosions.splice(i, 1);
-      }
-    }
-
-    function roundRect(x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.arcTo(x + w, y, x + w, y + h, r);
-      ctx.arcTo(x + w, y + h, x, y + h, r);
-      ctx.arcTo(x, y + h, x, y, r);
-      ctx.arcTo(x, y, x + w, y, r);
-      ctx.closePath();
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          const x = c * TILE;
-          const y = r * TILE;
-          ctx.fillStyle = (r + c) % 2 === 0 ? '#16213e' : '#1a1a2e';
-          ctx.fillRect(x, y, TILE, TILE);
-          if (map[r][c] === HARD) {
-            const g = ctx.createLinearGradient(x, y, x + TILE, y + TILE);
-            g.addColorStop(0, '#4a4e69');
-            g.addColorStop(1, '#22223b');
-            ctx.fillStyle = g;
-            roundRect(x + 3, y + 3, TILE - 6, TILE - 6, 8);
-            ctx.fill();
-            ctx.fillStyle = 'rgba(255,255,255,0.07)';
-            roundRect(x + 7, y + 7, TILE - 20, 9, 3);
-            ctx.fill();
-          }
-          if (map[r][c] === SOFT) {
-            const g = ctx.createLinearGradient(x, y, x + TILE, y + TILE);
-            g.addColorStop(0, '#f4a261');
-            g.addColorStop(1, '#e76f51');
-            ctx.fillStyle = g;
-            roundRect(x + 4, y + 4, TILE - 8, TILE - 8, 10);
-            ctx.fill();
-            ctx.fillStyle = 'rgba(0,0,0,0.18)';
-            ctx.beginPath();
-            ctx.arc(x + TILE / 2, y + TILE / 2, 7, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-      }
-      for (const b of bombs) {
-        const x = b.c * TILE + TILE / 2;
-        const y = b.r * TILE + TILE / 2;
-        const pulse = 1 + Math.sin(performance.now() / 110) * 0.09;
-        ctx.beginPath();
-        ctx.arc(x, y, 17 * pulse, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,70,70,0.22)';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(x, y, 13 * pulse, 0, Math.PI * 2);
-        const g = ctx.createRadialGradient(x - 3, y - 3, 2, x, y, 13);
-        g.addColorStop(0, '#ff6b6b');
-        g.addColorStop(1, '#c0392b');
-        ctx.fillStyle = g;
-        ctx.fill();
-        ctx.strokeStyle = '#f1c40f';
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.moveTo(x + 7, y - 9);
-        ctx.quadraticCurveTo(x + 13, y - 16, x + 9, y - 20);
-        ctx.stroke();
-      }
-      for (const ex of explosions) {
-        const x = ex.c * TILE + TILE / 2;
-        const y = ex.r * TILE + TILE / 2;
-        const alpha = Math.min(1, ex.life / EXPLODE_DURATION);
-        const size = 18 + (1 - alpha) * 12;
-        ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,190,40,${alpha * 0.85})`;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(x, y, size * 0.55, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,90,20,${alpha})`;
-        ctx.fill();
-      }
-      const px = player.px;
-      const py = player.py;
-      ctx.beginPath();
-      ctx.ellipse(px, py + 15, 13, 5, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0,0,0,0.28)';
-      ctx.fill();
-      const pGrad = ctx.createRadialGradient(px - 4, py - 7, 2, px, py, 16);
-      pGrad.addColorStop(0, '#7dd3fc');
-      pGrad.addColorStop(1, '#3b82f6');
-      ctx.beginPath();
-      ctx.arc(px, py, 15, 0, Math.PI * 2);
-      ctx.fillStyle = pGrad;
-      ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(px - 5, py - 3, 3.2, 0, Math.PI * 2);
-      ctx.arc(px + 5, py - 3, 3.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#0f172a';
-      ctx.beginPath();
-      ctx.arc(px - 4, py - 3, 1.6, 0, Math.PI * 2);
-      ctx.arc(px + 6, py - 3, 1.6, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function loop(timestamp) {
-      if (!lastTime) lastTime = timestamp;
-      const dt = Math.min(timestamp - lastTime, 50);
-      lastTime = timestamp;
-      if (gameState === 'playing') {
-        updatePlayer(dt);
-        updateBombs(dt);
-        updateExplosions(dt);
-        statusEl.textContent = `Soft blocks: ${softCount}`;
-      }
-      draw();
-      animId = requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('keydown', e => {
-      keys[e.key] = true;
-      if (e.key === ' ' || e.code === 'Space') {
-        e.preventDefault();
-        placeBomb();
-      }
-    });
-    window.addEventListener('keyup', e => { keys[e.key] = false; });
-
-    document.querySelectorAll('.dpad-btn[data-dir]').forEach(btn => {
-      const dir = btn.dataset.dir;
-      const setDir = (active) => {
-        if (active) {
-          btn.classList.add('active');
-          if (dir === 'up') moveDir.y = -1;
-          if (dir === 'down') moveDir.y = 1;
-          if (dir === 'left') moveDir.x = -1;
-          if (dir === 'right') moveDir.x = 1;
-        } else {
-          btn.classList.remove('active');
-          if (dir === 'up' || dir === 'down') moveDir.y = 0;
-          if (dir === 'left' || dir === 'right') moveDir.x = 0;
-        }
-      };
-      btn.addEventListener('touchstart', e => { e.preventDefault(); setDir(true); }, { passive: false });
-      btn.addEventListener('touchend', e => { e.preventDefault(); setDir(false); });
-      btn.addEventListener('touchcancel', () => setDir(false));
-      btn.addEventListener('mousedown', () => setDir(true));
-      btn.addEventListener('mouseup', () => setDir(false));
-      btn.addEventListener('mouseleave', () => setDir(false));
-    });
-
-    const triggerBomb = (e) => {
-      e.preventDefault();
-      bombBtn.classList.add('active');
-      placeBomb();
-      setTimeout(() => bombBtn.classList.remove('active'), 150);
-    };
-    bombBtn.addEventListener('touchstart', triggerBomb, { passive: false });
-    bombBtn.addEventListener('mousedown', triggerBomb);
-
-    startBtn.addEventListener('click', startGame);
-    startBtn.addEventListener('touchend', e => { e.preventDefault(); startGame(); });
-
-    function startGame() {
-      createMap();
-      resetPlayer();
-      bombs = [];
-      explosions = [];
-      moveDir = { x: 0, y: 0 };
-      gameState = 'playing';
-      overlay.classList.remove('show');
-      statusEl.textContent = `Soft blocks: ${softCount}`;
-      if (!animId) {
-        lastTime = 0;
-        animId = requestAnimationFrame(loop);
-      }
-    }
-
-    function showOverlay(title, msg) {
-      overlayTitle.textContent = title;
-      overlayMsg.textContent = msg;
-      startBtn.textContent = 'เล่นอีกครั้ง';
-      overlay.classList.add('show');
-    }
-
-    document.body.addEventListener('touchmove', e => {
-      if (e.target.closest('.dpad') || e.target.closest('.bomb-btn') || e.target.tagName === 'CANVAS') {
-        e.preventDefault();
-      }
-    }, { passive: false });
-
-    createMap();
-    resetPlayer();
-    requestAnimationFrame(loop);
+    // Full upgraded game code with Power-ups, Enemies, Levels, Particles, Lives, Score, Exit door
+    const COLS=13,ROWS=11,TILE=48,EMPTY=0,HARD=1,SOFT=2,EXIT=3,BOMB_TIMER=2200,EXPLODE_TIME=380;
+    const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+    const $=id=>document.getElementById(id);
+    let map=[],player,bombs=[],explosions=[],enemies=[],powerups=[],particles=[];
+    let keys={},moveDir={x:0,y:0},gameState='ready',lastTime=0,animId=null;
+    let level=1,score=0,lives=3,maxBombs=1,bombRange=1,speedMul=1,softLeft=0,enemiesLeft=0,exitOpen=false,invincible=0;
+    const LEVELS=[{soft:.55,enemies:2,name:"เริ่มต้น"},{soft:.62,enemies:3,name:"อันตราย"},{soft:.68,enemies:4,name:"ท้าทาย"},{soft:.72,enemies:5,name:"โหด"},{soft:.75,enemies:6,name:"นรก"}];
+    function createMap(lv){const conf=LEVELS[Math.min(lv-1,LEVELS.length-1)];map=Array.from({length:ROWS},()=>Array(COLS).fill(EMPTY));for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(r===0||r===ROWS-1||c===0||c===COLS-1||(r%2===0&&c%2===0))map[r][c]=HARD;softLeft=0;for(let r=1;r<ROWS-1;r++)for(let c=1;c<COLS-1;c++)if(map[r][c]!==HARD&&!(r<=2&&c<=2)&&Math.random()<conf.soft){map[r][c]=SOFT;softLeft++;}enemies=[];let tries=0;while(enemies.length<conf.enemies&&tries++<90){const r=1+Math.floor(Math.random()*(ROWS-2)),c=1+Math.floor(Math.random()*(COLS-2));if(map[r][c]===EMPTY&&!(r<=3&&c<=3))enemies.push({x:c,y:r,px:c*TILE+TILE/2,py:r*TILE+TILE/2,dir:[[1,0],[-1,0],[0,1],[0,-1]][Math.floor(Math.random()*4)],timer:0,speed:1.05+lv*.09});}enemiesLeft=enemies.length;exitOpen=false;powerups=[];bombs=[];explosions=[];particles=[];}
+    function resetPlayer(){player={x:1,y:1,px:1*TILE+TILE/2,py:1*TILE+TILE/2};invincible=1300;}
+    function tileAt(px,py){const c=Math.floor(px/TILE),r=Math.floor(py/TILE);if(r<0||r>=ROWS||c<0||c>=COLS)return HARD;return map[r][c];}
+    function canWalk(px,py,ignoreBomb=false){const m=12,pts=[[px-m,py-m],[px+m,py-m],[px-m,py+m],[px+m,py+m]];for(const[x,y]of pts){const t=tileAt(x,y);if(t===HARD||t===SOFT)return false;if(!ignoreBomb)for(const b of bombs)if(b.r===Math.floor(y/TILE)&&b.c===Math.floor(x/TILE))return false;}return true;}
+    function updatePlayer(dt){if(gameState!=='playing')return;if(invincible>0)invincible-=dt;let dx=moveDir.x,dy=moveDir.y;if(keys['ArrowUp']||keys['w']||keys['W'])dy=-1;if(keys['ArrowDown']||keys['s']||keys['S'])dy=1;if(keys['ArrowLeft']||keys['a']||keys['A'])dx=-1;if(keys['ArrowRight']||keys['d']||keys['D'])dx=1;if(dx&&dy){dx*=.707;dy*=.707}const sp=2.9*speedMul*(dt/16.67),nx=player.px+dx*sp,ny=player.py+dy*sp;if(dx&&canWalk(nx,player.py))player.px=nx;if(dy&&canWalk(player.px,ny))player.py=ny;player.px=Math.max(TILE/2+2,Math.min((COLS-.5)*TILE-2,player.px));player.py=Math.max(TILE/2+2,Math.min((ROWS-.5)*TILE-2,player.py));player.x=Math.floor(player.px/TILE);player.y=Math.floor(player.py/TILE);for(let i=powerups.length-1;i>=0;i--){const p=powerups[i];if(Math.abs(p.px-player.px)<20&&Math.abs(p.py-player.py)<20){applyPower(p.type);powerups.splice(i,1);score+=50;updateUI();}}if(exitOpen&&map[player.y][player.x]===EXIT)nextLevel();}
+    function applyPower(type){if(type==='bomb')maxBombs=Math.min(5,maxBombs+1);if(type==='range')bombRange=Math.min(6,bombRange+1);if(type==='speed')speedMul=Math.min(1.75,speedMul+.18);updateUI();}
+    function placeBomb(){if(gameState!=='playing'||bombs.length>=maxBombs)return;const c=player.x,r=player.y;if(bombs.some(b=>b.c===c&&b.r===r))return;bombs.push({c,r,timer:BOMB_TIMER});}
+    function updateBombs(dt){for(let i=bombs.length-1;i>=0;i--){bombs[i].timer-=dt;if(bombs[i].timer<=0){explode(bombs[i].c,bombs[i].r);bombs.splice(i,1);}}}
+    function explode(c,r){const dirs=[[0,0],[0,-1],[0,1],[-1,0],[1,0]],cells=[];for(const[dc,dr]of dirs){for(let i=0;i<=bombRange;i++){const nc=c+dc*i,nr=r+dr*i;if(nr<0||nr>=ROWS||nc<0||nc>=COLS)break;if(map[nr][nc]===HARD)break;cells.push({c:nc,r:nr});explosions.push({c:nc,r:nr,life:EXPLODE_TIME});for(let k=0;k<3;k++)particles.push({x:nc*TILE+TILE/2,y:nr*TILE+TILE/2,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,life:280+Math.random()*180,color:`hsl(${25+Math.random()*35},100%,60%)`});if(map[nr][nc]===SOFT){map[nr][nc]=EMPTY;softLeft--;score+=10;if(Math.random()<.33){const types=['bomb','range','speed'];powerups.push({c:nc,r:nr,type:types[Math.floor(Math.random()*3)],px:nc*TILE+TILE/2,py:nr*TILE+TILE/2});}break;}}}for(let i=enemies.length-1;i>=0;i--){const e=enemies[i];if(cells.some(cl=>cl.c===e.x&&cl.r===e.y)){enemies.splice(i,1);enemiesLeft--;score+=100;for(let k=0;k<7;k++)particles.push({x:e.px,y:e.py,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,life:380,color:'#ff6b6b'});}}if(invincible<=0&&cells.some(cl=>cl.c===player.x&&cl.r===player.y))hurtPlayer();if(softLeft<=0&&enemiesLeft<=0&&!exitOpen){for(let r=ROWS-2;r>=1;r--)for(let c=COLS-2;c>=1;c--)if(map[r][c]===EMPTY){map[r][c]=EXIT;exitOpen=true;break;}}updateUI();}
+    function hurtPlayer(){lives--;invincible=1800;updateUI();if(lives<=0){gameState='lose';showOverlay('คุณแพ้!','คะแนน: '+score);}}
+    function updateEnemies(dt){for(const e of enemies){e.timer-=dt;if(e.timer<=0){const dirs=[[1,0],[-1,0],[0,1],[0,-1]];let nd=e.dir;const tx=e.px+nd[0]*TILE*.35,ty=e.py+nd[1]*TILE*.35;if(!canWalk(tx,ty,true)||Math.random()<.09)nd=dirs[Math.floor(Math.random()*4)];e.dir=nd;e.timer=260+Math.random()*380;}const sp=e.speed*(dt/16.67),nx=e.px+e.dir[0]*sp,ny=e.py+e.dir[1]*sp;if(canWalk(nx,e.py,true))e.px=nx;else e.dir[0]*=-1;if(canWalk(e.px,ny,true))e.py=ny;else e.dir[1]*=-1;e.x=Math.floor(e.px/TILE);e.y=Math.floor(e.py/TILE);if(invincible<=0&&Math.abs(e.px-player.px)<22&&Math.abs(e.py-player.py)<22)hurtPlayer();}}
+    function updateExplosions(dt){for(let i=explosions.length-1;i>=0;i--){explosions[i].life-=dt;if(explosions[i].life<=0)explosions.splice(i,1);}}
+    function updateParticles(dt){for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.life-=dt;p.vy+=.07;if(p.life<=0)particles.splice(i,1);}}
+    function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+    function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const x=c*TILE,y=r*TILE;ctx.fillStyle=(r+c)%2===0?'#15132b':'#12102a';ctx.fillRect(x,y,TILE,TILE);if(map[r][c]===HARD){const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,'#3d3a5c');g.addColorStop(1,'#252340');ctx.fillStyle=g;roundRect(x+3,y+3,TILE-6,TILE-6,9);ctx.fill();ctx.fillStyle='rgba(255,255,255,.06)';roundRect(x+7,y+7,TILE-18,8,3);ctx.fill();}if(map[r][c]===SOFT){const g=ctx.createLinearGradient(x,y,x+TILE,y+TILE);g.addColorStop(0,'#f4a261');g.addColorStop(1,'#e76f51');ctx.fillStyle=g;roundRect(x+4,y+4,TILE-8,TILE-8,11);ctx.fill();ctx.fillStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.arc(x+TILE/2,y+TILE/2,7,0,Math.PI*2);ctx.fill();}if(map[r][c]===EXIT){ctx.fillStyle='#2ecc71';roundRect(x+8,y+8,TILE-16,TILE-16,8);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 18px Outfit';ctx.textAlign='center';ctx.fillText('🚪',x+TILE/2,y+TILE/2+7);}}for(const p of powerups){const pulse=1+Math.sin(performance.now()/150)*.1;ctx.beginPath();ctx.arc(p.px,p.py,13*pulse,0,Math.PI*2);ctx.fillStyle=p.type==='bomb'?'#ff6b6b':p.type==='range'?'#f1c40f':'#3498db';ctx.fill();ctx.fillStyle='#fff';ctx.font='14px Outfit';ctx.textAlign='center';ctx.fillText(p.type==='bomb'?'💣':p.type==='range'?'🔥':'⚡',p.px,p.py+5);}for(const b of bombs){const x=b.c*TILE+TILE/2,y=b.r*TILE+TILE/2,pulse=1+Math.sin(performance.now()/100)*.1;ctx.beginPath();ctx.arc(x,y,16*pulse,0,Math.PI*2);ctx.fillStyle='rgba(255,70,70,.25)';ctx.fill();ctx.beginPath();ctx.arc(x,y,12*pulse,0,Math.PI*2);const g=ctx.createRadialGradient(x-3,y-3,2,x,y,12);g.addColorStop(0,'#ff6b6b');g.addColorStop(1,'#c0392b');ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='#f1c40f';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(x+7,y-8);ctx.quadraticCurveTo(x+13,y-15,x+9,y-19);ctx.stroke();}for(const ex of explosions){const x=ex.c*TILE+TILE/2,y=ex.r*TILE+TILE/2,a=Math.min(1,ex.life/EXPLODE_TIME),s=16+(1-a)*14;ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fillStyle=`rgba(255,190,40,${a*.85})`;ctx.fill();ctx.beginPath();ctx.arc(x,y,s*.55,0,Math.PI*2);ctx.fillStyle=`rgba(255,80,20,${a})`;ctx.fill();}for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/400);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}for(const e of enemies){ctx.beginPath();ctx.ellipse(e.px,e.py+14,12,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.3)';ctx.fill();const g=ctx.createRadialGradient(e.px-3,e.py-5,2,e.px,e.py,14);g.addColorStop(0,'#ff8a80');g.addColorStop(1,'#c62828');ctx.beginPath();ctx.arc(e.px,e.py,13,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(e.px-4,e.py-2,3,0,Math.PI*2);ctx.arc(e.px+4,e.py-2,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(e.px-3,e.py-2,1.5,0,Math.PI*2);ctx.arc(e.px+5,e.py-2,1.5,0,Math.PI*2);ctx.fill();}if(invincible<=0||Math.floor(invincible/80)%2===0){const px=player.px,py=player.py;ctx.beginPath();ctx.ellipse(px,py+15,13,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.28)';ctx.fill();const g=ctx.createRadialGradient(px-4,py-7,2,px,py,16);g.addColorStop(0,'#7dd3fc');g.addColorStop(1,'#2563eb');ctx.beginPath();ctx.arc(px,py,15,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px-5,py-3,3.3,0,Math.PI*2);ctx.arc(px+5,py-3,3.3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(px-4,py-3,1.7,0,Math.PI*2);ctx.arc(px+6,py-3,1.7,0,Math.PI*2);ctx.fill();}}
+    function updateUI(){$('levelNum').textContent=level;$('lives').textContent=lives;$('score').textContent=score;$('bombCount').textContent=maxBombs;$('bombRange').textContent=bombRange;$('speedLvl').textContent=speedMul.toFixed(1);}
+    function showOverlay(title,msg){$('ovTitle').textContent=title;$('ovMsg').textContent=msg;$('startBtn').textContent=(gameState==='win'||gameState==='lose')?'เล่นอีกครั้ง':'เริ่มเกม';$('overlay').classList.add('show');}
+    function startGame(){level=1;score=0;lives=3;maxBombs=1;bombRange=1;speedMul=1;createMap(level);resetPlayer();gameState='playing';$('overlay').classList.remove('show');updateUI();if(!animId){lastTime=0;animId=requestAnimationFrame(loop);}}
+    function nextLevel(){level++;score+=500;if(level>LEVELS.length){gameState='win';showOverlay('ชนะทั้งหมด!','สุดยอด! คะแนน '+score);return;}createMap(level);resetPlayer();updateUI();showOverlay('ด่าน '+level,LEVELS[level-1].name);setTimeout(()=>{$('overlay').classList.remove('show');gameState='playing';},1300);}
+    function loop(ts){if(!lastTime)lastTime=ts;const dt=Math.min(ts-lastTime,50);lastTime=ts;if(gameState==='playing'){updatePlayer(dt);updateBombs(dt);updateEnemies(dt);updateExplosions(dt);updateParticles(dt);}draw();animId=requestAnimationFrame(loop);}
+    window.addEventListener('keydown',e=>{keys[e.key]=true;if(e.key===' '||e.code==='Space'){e.preventDefault();placeBomb();}});
+    window.addEventListener('keyup',e=>keys[e.key]=false);
+    document.querySelectorAll('.dpad-btn[data-dir]').forEach(btn=>{const dir=btn.dataset.dir;const set=on=>{btn.classList.toggle('active',on);if(dir==='up')moveDir.y=on?-1:0;if(dir==='down')moveDir.y=on?1:0;if(dir==='left')moveDir.x=on?-1:0;if(dir==='right')moveDir.x=on?1:0;};btn.addEventListener('touchstart',e=>{e.preventDefault();set(true);},{passive:false});btn.addEventListener('touchend',e=>{e.preventDefault();set(false);});btn.addEventListener('touchcancel',()=>set(false));btn.addEventListener('mousedown',()=>set(true));btn.addEventListener('mouseup',()=>set(false));btn.addEventListener('mouseleave',()=>set(false));});
+    const bombTrigger=e=>{e.preventDefault();$('bombBtn').classList.add('active');placeBomb();setTimeout(()=>$('bombBtn').classList.remove('active'),140);};
+    $('bombBtn').addEventListener('touchstart',bombTrigger,{passive:false});$('bombBtn').addEventListener('mousedown',bombTrigger);
+    $('startBtn').addEventListener('click',startGame);$('startBtn').addEventListener('touchend',e=>{e.preventDefault();startGame();});
+    document.body.addEventListener('touchmove',e=>{if(e.target.closest('.dpad')||e.target.closest('.bomb-btn')||e.target.tagName==='CANVAS')e.preventDefault();},{passive:false});
+    createMap(1);resetPlayer();updateUI();requestAnimationFrame(loop);
   </script>
 </body>
 </html>
